@@ -28,6 +28,15 @@ const Header = () => {
           <li>
             <Link to="/pos">POS</Link>
           </li>
+          <li>
+            <Link to="/localapi">Local API</Link>
+          </li>
+          <li>
+            <Link to="/cloudapisync">Cloud API Sync</Link>
+          </li>
+          <li>
+            <Link to="/cloudapiasync">Cloud API Async</Link>
+          </li>
         </ul>
       </nav>
   </div>

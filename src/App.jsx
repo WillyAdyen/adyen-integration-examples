@@ -13,6 +13,7 @@ import Dropin from './pages/Ecom/Dropin';
 import Components from "./pages/Ecom/Components";
 import Component from "./pages/Ecom/Component";
 import Confirmation from "./pages/Confirmation";
+import PosIntegration from "./pages/Pos/PosIntegration";
 
 const App = () => {
   return (
@@ -44,6 +45,15 @@ const App = () => {
           ))}
           <Route exact path="/pos">
             <Pos />
+          </Route>
+          <Route exact path="/localapi">
+            <PosIntegration integrationType={"local"} />
+          </Route>
+          <Route exact path="/cloudapisync">
+            <PosIntegration integrationType={"cloudsync"} />
+          </Route>
+          <Route exact path="/cloudapiasync">
+            <PosIntegration integrationType={"cloudasync"} />
           </Route>
           <Route exact path="/confirmation">
             <Confirmation />
