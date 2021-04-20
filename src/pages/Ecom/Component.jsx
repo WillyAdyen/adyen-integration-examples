@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Redirect } from "react-router";
 import AdyenCheckout from "@adyen/adyen-web";
 import AdyenAPIHelper from '../../utils/helpers/AdyenAPIHelper';
 
 const Component = ( { paymentMethod } ) => {
     const errorRef = useRef(null)
     const [errorMsg, setErrorMsg] = useState("");
-    const [paymentStatus, setPaymentStatus] = useState("");
+    const [resultCode, setResultCode] = useState("");
 
     useEffect(() => {
         renderComponent();
@@ -16,72 +17,9 @@ const Component = ( { paymentMethod } ) => {
             details: state.data.details,
             paymentData: state.data.paymentData
         }
-
         AdyenAPIHelper.handleDetails(body)
         .then(response => {
-                // TODO: handle result
-/*                 "additionalData": {
-                    "refusalReasonRaw": "AUTHORISED",
-                    "eci": "05",
-                    "threeDSVersion": "2.1.0",
-                    "acquirerAccountCode": "TestPmmAcquirerAccount",
-                    "threeDAuthenticated": "true",
-                    "paymentMethodVariant": "visacredit",
-                    "threeDOffered": "true",
-                    "threeDOfferedResponse": "C",
-                    "authorisationMid": "1000",
-                    "cavv": "QURZRU4gM0RTMiBURVNUIENBVlY=",
-                    "authorisedAmountCurrency": "SEK",
-                    "threeDAuthenticatedResponse": "Y",
-                    "dsTransID": "b8c3d03d-c4c3-403e-9f54-deb6b63d2471",
-                    "avsResultRaw": "5",
-                    "retry.attempt1.rawResponse": "AUTHORISED",
-                    "paymentMethod": "visa",
-                    "avsResult": "5 No AVS data provided",
-                    "cardSummary": "0006",
-                    "retry.attempt1.avsResultRaw": "5",
-                    "networkTxReference": "053509878871285",
-                    "expiryDate": "3/2030",
-                    "cardBin": "421234",
-                    "cvcResultRaw": "M",
-                    "merchantReference": "YOUR_ORDER_NUMBER",
-                    "acquirerReference": "7F6EHBKVI4N",
-                    "cardIssuingCountry": "NL",
-                    "liabilityShift": "true",
-                    "authCode": "034214",
-                    "cardHolderName": "Checkout Shopper PlaceHolder",
-                    "isCardCommercial": "unknown",
-                    "retry.attempt1.acquirerAccount": "TestPmmAcquirerAccount",
-                    "retry.attempt1.acquirer": "TestPmmAcquirer",
-                    "authorisedAmountValue": "1000",
-                    "issuerCountry": "NL",
-                    "cvcResult": "1 Matches",
-                    "retry.attempt1.responseCode": "Approved",
-                    "retry.attempt1.shopperInteraction": "Ecommerce",
-                    "cardPaymentMethod": "visacredit",
-                    "acquirerCode": "TestPmmAcquirer"
-                },
-                "fraudResult": {
-                    "accountScore": 0,
-                    "results": [
-                        {
-                            "FraudCheckResult": {
-                                "accountScore": 0,
-                                "checkId": -1,
-                                "name": "Pre-Auth-Risk-Total"
-                            }
-                        }
-                    ]
-                },
-                "pspReference": "863616167999008B",
-                "resultCode": "Authorised",
-                "amount": {
-                    "currency": "SEK",
-                    "value": 1000
-                },
-                "merchantReference": "YOUR_ORDER_NUMBER"
-            } */
-            console.log(response);
+            setResultCode(response.resultCode);
         })
         .catch(error => {
             throw Error(error);
@@ -104,8 +42,8 @@ const Component = ( { paymentMethod } ) => {
                                 environment: "test", // When you're ready to accept live payments, change the value to one of our live environments https://docs.adyen.com/online-payments/components-web#testing-your-integration.  
                                 clientKey: "test_AWHTVRUIQBCC5IX6EVHDZZEO3UBYUUPJ", // Your client key. To find out how to generate one, see https://docs.adyen.com/development-resources/client-side-authentication. Web Components versions before 3.10.1 use originKey instead of clientKey.
                                 paymentMethodsResponse: response, // The payment methods response returned in step 1.
-                                onSubmit: handleOnSubmit // Your function for handling onChange event
-                                //onAdditionalDetails: handleOnAdditionalDetails // Your function for handling onAdditionalDetails event
+                                onSubmit: handleOnSubmit, // Your function for handling onChange event
+                                onAdditionalDetails: handleOnAdditionalDetails // Your function for handling onAdditionalDetails event
                             };
                 
                             localStorage.setItem('paymentData', response.action.paymentData); // Not necessary for v67
@@ -138,14 +76,19 @@ const Component = ( { paymentMethod } ) => {
                             checkout.createFromAction(response.action, threeDSConfiguration).mount('#component-container');
 
                             break;
+                        case "sdk":
+                        case "default":
+                            component.handleAction(response.action);
+                            break;
+                            
                     }
                 } else {
                     switch (response.resultCode) {
                         case "Authorised":
-                            setPaymentStatus('success');
+                            setResultCode('success');
                             break;
                         case "Error":
-                            setPaymentStatus('error');
+                            setResultCode('error');
                             break;
                         case "Refused":
                             setErrorMsg(response.refusalReason);
@@ -170,8 +113,8 @@ const Component = ( { paymentMethod } ) => {
                 environment: "test", // When you're ready to accept live payments, change the value to one of our live environments https://docs.adyen.com/online-payments/components-web#testing-your-integration.  
                 clientKey: "test_AWHTVRUIQBCC5IX6EVHDZZEO3UBYUUPJ", // Your client key. To find out how to generate one, see https://docs.adyen.com/development-resources/client-side-authentication. Web Components versions before 3.10.1 use originKey instead of clientKey.
                 paymentMethodsResponse: data, // The payment methods response returned in step 1.
-                onSubmit: handleOnSubmit // Your function for handling onChange event
-                //onAdditionalDetails: handleOnAdditionalDetails // Your function for handling onAdditionalDetails event
+                onSubmit: handleOnSubmit, // Your function for handling onChange event
+                onAdditionalDetails: handleOnAdditionalDetails // Your function for handling onAdditionalDetails event
             };
 
             const checkout = new AdyenCheckout(configuration);
@@ -183,9 +126,12 @@ const Component = ( { paymentMethod } ) => {
   <div>
     <h1>{paymentMethod}</h1>
     <p ref={errorRef}>{errorMsg}</p>
-    {
-        !paymentStatus ? (<div id="component-container"></div>) : (<p>{paymentStatus}</p>)
-    }
+    <div id="component-container"></div>
+
+    {resultCode && (<Redirect to={{
+        pathname: "/confirmation",
+        state: { resultCode: resultCode }
+    }} />)}
     
   </div>
   );

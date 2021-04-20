@@ -1,0 +1,67 @@
+.wrapper {
+    padding: 0 20px;
+}
+
+body {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+ul {
+    list-style:none;
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: gray;
+
+    &-level-one {
+        display: flex;
+
+        > li {
+            padding: 20px;
+
+            &:hover {
+                + .navbar-level-two {
+                    display: flex;
+                    z-index: 10;
+                }
+            }
+        }
+
+        li {
+            margin-top: 5px;
+        }
+    }
+
+    &-level-two {
+        display: none;
+        position: absolute;
+        top: 55px;
+        width: 100vw;
+        background-color: lightgrey;
+
+        &:hover {
+            display: flex;
+        }
+
+        > li {
+            padding: 20px;
+
+            > a {
+                font-weight: bold;
+            }
+        }
+    }
+}

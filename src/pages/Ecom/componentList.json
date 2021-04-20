@@ -1,4 +1,5 @@
 [
     "card",
-    "klarna_paynow"
+    "klarna_paynow",
+    "paypal"
 ]

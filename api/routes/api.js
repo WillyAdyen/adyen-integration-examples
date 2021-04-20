@@ -94,7 +94,7 @@ router.post("/payments", function(req, res, next) {
         merchantAccount: process.env.MERCHANT_ACCOUNT,
         countryCode: "SE",
         paymentMethod: stateData.paymentMethod,
-        amount: { currency: "SEK", value: 1000, },
+        amount: { currency: "USD", value: 1000, },
         reference: "YOUR_ORDER_NUMBER",
         returnUrl: "http://localhost:3000/confirmation",
         additionalData: {
@@ -131,7 +131,7 @@ router.post("/makePOSPayment", function(req, res, next) {
     switch (integrationType) {
         case "local":
             config.certificatePath = "/Users/willy/Documents/GitHub/Work/adyen-integration-examples/adyen-terminalfleet-test.pem";
-            config.terminalApiLocalEndpoint = "https://192.168.38.124";
+            config.terminalApiLocalEndpoint = "https://192.168.1.11";
             break;
         case "cloudsync":
             config.terminalApiCloudEndpoint = "https://terminal-api-test.adyen.com/sync";
@@ -192,7 +192,7 @@ router.post("/makePOSPayment", function(req, res, next) {
             terminalApi
             .request(terminalAPIPaymentRequest, securityKey)
             .then((obj) => {
-                res.send(obj);
+              res.send(obj);
               console.log("No Error: ", JSON.stringify(obj));
             })
             .catch((err) => {

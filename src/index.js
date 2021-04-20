@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import './index.css';
+import './style/general.scss';
 import App from './App';
 
 render((

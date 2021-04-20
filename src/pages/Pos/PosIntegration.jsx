@@ -7,7 +7,6 @@ const PosIntegration = ({ integrationType }) => {
   const makePayment = () => {
     AdyenAPIHelper.makePOSPayment(integrationType)
     .then(response => {
-        console.log(JSON.stringify(response));
         setPaymentResponse(JSON.stringify(response));
     })
     .catch(error => {

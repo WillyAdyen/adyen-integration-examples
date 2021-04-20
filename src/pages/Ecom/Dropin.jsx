@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import AdyenCheckout from "@adyen/adyen-web";
 import AdyenAPIHelper from '../../utils/helpers/AdyenAPIHelper';
+import { Redirect } from "react-router";
 
 const Dropin = () => {
     const errorRef = useRef(null)
     const [errorMsg, setErrorMsg] = useState("");
+    const [resultCode, setResultCode] = useState("");
 
     useEffect(() => {
         renderDropin();
@@ -48,21 +50,18 @@ const Dropin = () => {
                     throw Error(error);
                 });
             },
-            onAdditionalDetails: (state, dropin) => {
-            // Your function calling your server to make a `/payments/details` request
-/*             makeDetailsCall(state.data)
-                .then(response => {
-                if (response.action) {
-                    // Drop-in handles the action object from the /payments response
-                    dropin.handleAction(response.action);
-                } else {
-                    // Your function to show the final result to the shopper
-                    showFinalResult(response);
+            onAdditionalDetails: (state) => {
+                var body = {
+                    details: state.data.details,
+                    paymentData: state.data.paymentData
                 }
+                AdyenAPIHelper.handleDetails(body)
+                .then(response => {
+                    setResultCode(response.resultCode);
                 })
                 .catch(error => {
-                throw Error(error);
-                }); */
+                    throw Error(error);
+                });
             },
             paymentMethodsConfiguration: {
             card: { // Example optional configuration for Cards
@@ -85,6 +84,11 @@ const Dropin = () => {
             <h1>Drop-in</h1>
             <p ref={errorRef}>{errorMsg}</p>
             <div id="dropin-container"></div>
+
+            {resultCode && (<Redirect to={{
+                        pathname: "/confirmation",
+                        state: { resultCode: resultCode }
+                      }} />)}
         </div>
     );
 }
