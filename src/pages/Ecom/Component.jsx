@@ -77,7 +77,7 @@ const Component = ( { paymentMethod } ) => {
 
                             break;
                         case "sdk":
-                        case "default":
+                        default:
                             component.handleAction(response.action);
                             break;
                             

@@ -1,5 +1,5 @@
-class SettingHelper {
-    static getSetting(key) {
+module.exports = {
+    getSetting: function (key) {
         const fallbackValues = {
             country: "NL",
             currency: "EUR",
@@ -9,4 +9,3 @@ class SettingHelper {
         return localStorage.getItem(key) ? localStorage.getItem(key) : fallbackValues[key];
     }
 }
-export default SettingHelper;

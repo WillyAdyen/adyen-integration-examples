@@ -3,6 +3,9 @@ var router = express.Router();
 
 const { Client, Config, CheckoutAPI, TerminalCloudAPI, TerminalLocalAPI } = require("@adyen/api-library");
 
+var POSRequestHelper = require("../helpers/POSRequestHelper");
+const { param } = require("../app");
+
 function createCheckout() {
     const config = new Config();
     // Set your X-API-KEY with the API key from the Customer Area.
@@ -72,12 +75,13 @@ const getLPMData = (paymentMethodType) => {
     }
 }
 
-router.get("/getPaymentMethods", function(req, res, next) {
+router.post("/getPaymentMethods", function(req, res, next) {
     var checkout = createCheckout();
+    const parameters = req.body;
     checkout.paymentMethods({ 
         merchantAccount: process.env.MERCHANT_ACCOUNT,
-        countryCode: "SE",
-        amount: { currency: "EUR", value: 1000, },
+        countryCode: parameters.country,
+        amount: { currency: parameters.currency, value: 1000, },
         channel: "Web"
     }).then(response => {
         res.send(response);
@@ -86,26 +90,24 @@ router.get("/getPaymentMethods", function(req, res, next) {
 
 router.post("/payments", function(req, res, next) {
     var checkout = createCheckout();
-
-    var stateData = req.body.stateData;
-    var origin = req.body.origin;
+    const parameters = req.body;
 
     var defaultPaymentRequest = { 
         merchantAccount: process.env.MERCHANT_ACCOUNT,
-        countryCode: "SE",
-        paymentMethod: stateData.paymentMethod,
-        amount: { currency: "USD", value: 1000, },
+        countryCode: parameters.country,
+        paymentMethod: parameters.stateData.paymentMethod,
+        amount: { currency: parameters.currency, value: 125, },
         reference: "YOUR_ORDER_NUMBER",
         returnUrl: "http://localhost:3000/confirmation",
         additionalData: {
             allow3DS2: true
         },
-        browserInfo: stateData.browserInfo,
+        browserInfo: parameters.stateData.browserInfo,
         channel: "WEB",
-        origin: origin
+        origin: parameters.origin
     };
 
-    var paymentRequest = Object.assign(defaultPaymentRequest, getLPMData(stateData.paymentMethod.type));
+    var paymentRequest = Object.assign(defaultPaymentRequest, getLPMData(parameters.stateData.paymentMethod.type));
 
     checkout.payments(paymentRequest).then(response => res.send(response)).catch(error => console.log(error));
 });
@@ -119,7 +121,7 @@ router.post("/details", function(req, res, next) {
     });
 });
 
-router.post("/makePOSPayment", function(req, res, next) {
+router.post("/makePOSRequest", function(req, res, next) {
     const config = new Config();
     // Set your X-API-KEY with the API key from the Customer Area.
     config.apiKey = "AQE6gXvdXN+ML0wU6mmxhmEH9LXKHtkVLbBFVXVXyGHlqW9Hkt56EdRyFThvE05KepFLKfILLX80ogOw6RDBXVsNvuR83LVYjEgiTGAH-OW4YvnwyOHFTw7DuMy7Ekac8obNRQ6nTyHhubw0q3Oc=-c3PIc;fSV]XT*2U>";
@@ -131,7 +133,7 @@ router.post("/makePOSPayment", function(req, res, next) {
     switch (integrationType) {
         case "local":
             config.certificatePath = "/Users/willy/Documents/GitHub/Work/adyen-integration-examples/adyen-terminalfleet-test.pem";
-            config.terminalApiLocalEndpoint = "https://192.168.1.11";
+            config.terminalApiLocalEndpoint = "https://192.168.38.115";
             break;
         case "cloudsync":
             config.terminalApiCloudEndpoint = "https://terminal-api-test.adyen.com/sync";
@@ -144,37 +146,7 @@ router.post("/makePOSPayment", function(req, res, next) {
 
     const client = new Client({ config });
     
-    // Random ID from cash register
-    const id = Math.floor(Math.random() * Math.floor(10000000)).toString();
-    
-    // Message header structure
-    const messageHeader = {
-      messageClass: "Service",
-      messageType: "Request",
-      pOIID: "V400m-347299584",
-      protocolVersion: "3.0",
-      saleID: "DemoCashRegisterID",
-      serviceID: id,
-      messageCategory: "Payment"
-    };
-    
-    const saleToPOIRequest = {
-      messageHeader: messageHeader,
-      paymentRequest: {
-        saleData: {
-          saleTransactionID: {
-            transactionID: Math.floor(Math.random() * Math.floor(10000000)).toString(), // Random payment reference
-            timeStamp: new Date().toISOString()
-          }
-        },
-        paymentTransaction: {
-          amountsReq: {
-            currency: "EUR",
-            requestedAmount: parseFloat((Math.random() * (40)).toFixed(2)) // random amount
-          }
-        }
-      }
-    };
+    const saleToPOIRequest = POSRequestHelper.createRequest("payment");
     
     const terminalAPIPaymentRequest = { saleToPOIRequest: saleToPOIRequest };
 
@@ -195,6 +167,7 @@ router.post("/makePOSPayment", function(req, res, next) {
               res.send(obj);
               console.log("No Error: ", JSON.stringify(obj));
             })
+            
             .catch((err) => {
               console.error(err);
             });

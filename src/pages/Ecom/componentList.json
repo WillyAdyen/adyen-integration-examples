@@ -1,5 +1,7 @@
 [
     "card",
     "klarna_paynow",
-    "paypal"
+    "paypal",
+    "bcmc_mobile",
+    "trustly"
 ]

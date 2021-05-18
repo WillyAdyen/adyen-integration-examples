@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import AdyenCheckout from "@adyen/adyen-web";
 import AdyenAPIHelper from '../../utils/helpers/AdyenAPIHelper';
 import { Redirect } from "react-router";
+import SettingHelper from "../../utils/helpers/SettingHelper";
 
 const Dropin = () => {
     const errorRef = useRef(null)
@@ -13,17 +14,15 @@ const Dropin = () => {
       }, []);
     
     const renderDropin = () => {
-    fetch("http://localhost:9000/api/getPaymentMethods")
-        .then(res => res.json())
+    AdyenAPIHelper.getPaymentMethods()
         .then(data => {
         const configuration = {
             paymentMethodsResponse: data, // The `/paymentMethods` response from the server.
             clientKey: "test_AWHTVRUIQBCC5IX6EVHDZZEO3UBYUUPJ", // Web Drop-in versions before 3.10.1 use originKey instead of clientKey.
-            locale: "en-US",
+            locale: SettingHelper.getSetting('locale'),
             environment: "test",
             onSubmit: (state, dropin) => {
                 // Your function calling your server to make the `/payments` request
-                console.log("before payment");
                 AdyenAPIHelper.makePayment(state.data)
                 .then(response => {
                     console.log(response);

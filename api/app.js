@@ -37,4 +37,10 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.set('port', 8080);
+console.log(app.get('port'));
+app.listen(app.get('port'), (something) => {
+  console.log("something", JSON.stringify(something));
+});
+
 module.exports = app;

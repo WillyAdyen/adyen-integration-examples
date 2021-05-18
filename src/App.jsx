@@ -43,6 +43,7 @@ const App = () => {
           <p>Refusal: 4444333322221111</p>
           <p>3DS: 4212345678910006</p>
           <select id="country" name="country" value={country} onChange={onSettingChange}>
+              <option value="BE">Belgium</option>
               <option value="NL">Netherlands</option>
               <option value="SE">Sweden</option>
               <option value="US">United States of America</option>
