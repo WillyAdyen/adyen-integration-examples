@@ -36,11 +36,11 @@ app.use(function(err, req, res, next) {
     error: err
   });
 });
-
-app.set('port', 8080);
+/* 
+app.set('port', 8443);
 console.log(app.get('port'));
 app.listen(app.get('port'), (something) => {
   console.log("something", JSON.stringify(something));
-});
+}); */
 
 module.exports = app;

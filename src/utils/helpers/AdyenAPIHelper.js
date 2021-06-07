@@ -35,7 +35,8 @@ class AdyenAPIHelper {
         stateData: stateData,
         origin: window.location.origin,
         country: SettingHelper.getSetting('country'),
-        currency: SettingHelper.getSetting('currency')
+        currency: SettingHelper.getSetting('currency'),
+        nativeThreeDS: SettingHelper.getSetting('nativeThreeDS')
       })
     })
     .then(res => res.json())

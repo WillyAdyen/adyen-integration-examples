@@ -4,7 +4,6 @@ var router = express.Router();
 const { Client, Config, CheckoutAPI, TerminalCloudAPI, TerminalLocalAPI } = require("@adyen/api-library");
 
 var POSRequestHelper = require("../helpers/POSRequestHelper");
-const { param } = require("../app");
 
 function createCheckout() {
     const config = new Config();
@@ -18,6 +17,7 @@ function createCheckout() {
 
 const getLPMData = (paymentMethodType) => {
     switch (paymentMethodType) {
+        case "klarna":
         case "klarna_paynow":
         case "klarna_account":
             return {
@@ -75,6 +75,16 @@ const getLPMData = (paymentMethodType) => {
     }
 }
 
+const addRequestParameter = (param) => {
+    if (param.nativeThreeDS) {
+        return {
+            additionalData: {
+                allow3DS2: true
+            }
+        };
+    }
+}
+
 router.post("/getPaymentMethods", function(req, res, next) {
     var checkout = createCheckout();
     const parameters = req.body;
@@ -99,15 +109,13 @@ router.post("/payments", function(req, res, next) {
         amount: { currency: parameters.currency, value: 125, },
         reference: "YOUR_ORDER_NUMBER",
         returnUrl: "http://localhost:3000/confirmation",
-        additionalData: {
-            allow3DS2: true
-        },
+        redirectFromIssuerMethod: "GET",
         browserInfo: parameters.stateData.browserInfo,
         channel: "WEB",
         origin: parameters.origin
     };
 
-    var paymentRequest = Object.assign(defaultPaymentRequest, getLPMData(parameters.stateData.paymentMethod.type));
+    var paymentRequest = Object.assign(defaultPaymentRequest, getLPMData(parameters.stateData.paymentMethod.type), addRequestParameter(parameters));
 
     checkout.payments(paymentRequest).then(response => res.send(response)).catch(error => console.log(error));
 });
@@ -116,9 +124,7 @@ router.post("/details", function(req, res, next) {
     var checkout = createCheckout();
     const body = req.body;
 
-    checkout.paymentsDetails(body).then(response => {
-        res.send(response);
-    });
+    checkout.paymentsDetails(body).then(response => res.send(response)).catch(error => console.log(error));
 });
 
 router.post("/makePOSRequest", function(req, res, next) {
@@ -165,7 +171,6 @@ router.post("/makePOSRequest", function(req, res, next) {
             .request(terminalAPIPaymentRequest, securityKey)
             .then((obj) => {
               res.send(obj);
-              console.log("No Error: ", JSON.stringify(obj));
             })
             
             .catch((err) => {
@@ -179,7 +184,6 @@ router.post("/makePOSRequest", function(req, res, next) {
             .sync(terminalAPIPaymentRequest)
             .then((obj) => {
                 res.send(obj);
-              console.log("No Error: ", JSON.stringify(obj));
             })
             .catch((err) => {
               console.error(err);
@@ -193,7 +197,6 @@ router.post("/makePOSRequest", function(req, res, next) {
             .async(terminalAPIPaymentRequest)
             .then((obj) => {
                 res.send(obj);
-              console.log("No Error: ", JSON.stringify(obj));
             })
             .catch((err) => {
               console.error(err);

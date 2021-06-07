@@ -3,8 +3,25 @@ module.exports = {
         const fallbackValues = {
             country: "NL",
             currency: "EUR",
-            locale: "nl_NL"
+            nativeThreeDS: false
         };
+
+        if (key === 'locale') {
+            var country = localStorage.getItem('country') || fallbackValues.country;
+            var language = 'en';
+            switch (country) {
+                case 'NL':
+                    language = 'nl';
+                    break;
+                case 'SE':
+                    language = 'sv';
+                    break;
+                default:
+                    language = 'en';
+                    break;
+            };
+            return language + '_' + country;
+        }
 
         return localStorage.getItem(key) ? localStorage.getItem(key) : fallbackValues[key];
     }

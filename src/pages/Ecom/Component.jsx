@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Redirect } from "react-router";
 import AdyenCheckout from "@adyen/adyen-web";
 import AdyenAPIHelper from '../../utils/helpers/AdyenAPIHelper';
+import SettingHelper from '../../utils/helpers/SettingHelper';
 
 const Component = ( { paymentMethod } ) => {
     const errorRef = useRef(null)
@@ -31,7 +32,6 @@ const Component = ( { paymentMethod } ) => {
             AdyenAPIHelper.makePayment(state.data)
             .then(response => {
                 if (response.action) {
-                    console.log(response.action);
                     var configuration = {};
                     var checkout;
                     switch (response.action.type) {
@@ -104,19 +104,17 @@ const Component = ( { paymentMethod } ) => {
     }
 
     const renderComponent = () => {
-        fetch("http://localhost:9000/api/getPaymentMethods")
-        .then(res => res.json())
+        AdyenAPIHelper.getPaymentMethods()
         .then(data => {
             const configuration = {
                 showPayButton: true,
-                locale: "en_US", // The shopper's locale. For a list of supported locales, see https://docs.adyen.com/online-payments/components-web/localization-components.
+                locale: SettingHelper.getSetting('locale'), // The shopper's locale. For a list of supported locales, see https://docs.adyen.com/online-payments/components-web/localization-components.
                 environment: "test", // When you're ready to accept live payments, change the value to one of our live environments https://docs.adyen.com/online-payments/components-web#testing-your-integration.  
                 clientKey: "test_AWHTVRUIQBCC5IX6EVHDZZEO3UBYUUPJ", // Your client key. To find out how to generate one, see https://docs.adyen.com/development-resources/client-side-authentication. Web Components versions before 3.10.1 use originKey instead of clientKey.
                 paymentMethodsResponse: data, // The payment methods response returned in step 1.
                 onSubmit: handleOnSubmit, // Your function for handling onChange event
                 onAdditionalDetails: handleOnAdditionalDetails // Your function for handling onAdditionalDetails event
             };
-
             const checkout = new AdyenCheckout(configuration);
             checkout.create(paymentMethod).mount('#component-container');
         });

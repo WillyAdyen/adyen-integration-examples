@@ -8,20 +8,29 @@ const Confirmation = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state.resultCode) {
+    if (location.state && location.state.resultCode) {
       setResultCode(location.state.resultCode);
     } else {
       const paymentData = localStorage.getItem('paymentData');
       const urlParams = new URLSearchParams(window.location.search);
       const payload = urlParams.get('payload') || urlParams.get('redirectResult');
-  
-      var body = {
-        details: {
-          redirectResult: payload
-        },
-        paymentData: paymentData
+      if (!payload) {
+        var body = {
+          details: {
+            MD: urlParams.get('MD'),
+            PaRes: urlParams.get('PaRes')
+          },
+          paymentData: paymentData
+        };
+      } else {
+        var body = {
+          details: {
+            redirectResult: payload
+          },
+          paymentData: paymentData
+        }
       }
-  
+
       AdyenAPIHelper.handleDetails(body)
         .then(response => {
           setResultCode(response.resultCode);

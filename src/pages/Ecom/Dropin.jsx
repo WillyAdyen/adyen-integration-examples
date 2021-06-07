@@ -9,6 +9,8 @@ const Dropin = () => {
     const [errorMsg, setErrorMsg] = useState("");
     const [resultCode, setResultCode] = useState("");
 
+    var dropIn = null;
+
     useEffect(() => {
         renderDropin();
       }, []);
@@ -25,11 +27,12 @@ const Dropin = () => {
                 // Your function calling your server to make the `/payments` request
                 AdyenAPIHelper.makePayment(state.data)
                 .then(response => {
-                    console.log(response);
                     if (response.action) {
-                        console.log(response.action);
                     // Drop-in handles the action object from the /payments response
                         dropin.handleAction(response.action);
+                        if (response.action.paymentData) {
+                            localStorage.setItem('paymentData', response.action.paymentData); // Not necessary for v67
+                        }
                     } else {
                         switch (response.resultCode) {
                             case "Authorised":
@@ -49,14 +52,19 @@ const Dropin = () => {
                     throw Error(error);
                 });
             },
-            onAdditionalDetails: (state) => {
+            onAdditionalDetails: (state, dropin) => {
                 var body = {
                     details: state.data.details,
                     paymentData: state.data.paymentData
                 }
                 AdyenAPIHelper.handleDetails(body)
                 .then(response => {
-                    setResultCode(response.resultCode);
+                    console.log(response);
+                    if (response.action) {
+                        dropin.handleAction(response.action);
+                    } else {
+                        setResultCode(response.resultCode);
+                    }
                 })
                 .catch(error => {
                     throw Error(error);
@@ -81,7 +89,8 @@ const Dropin = () => {
     return (
         <div className="App">
             <h1>Drop-in</h1>
-            <p ref={errorRef}>{errorMsg}</p>
+{/*             <button onClick={refreshDropIn}>Refresh Drop-in</button> TODO
+ */}            <p ref={errorRef}>{errorMsg}</p>
             <div id="dropin-container"></div>
 
             {resultCode && (<Redirect to={{
