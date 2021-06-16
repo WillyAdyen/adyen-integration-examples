@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Redirect } from "react-router";
 import AdyenCheckout from "@adyen/adyen-web";
-import AdyenAPIHelper from '../../utils/helpers/AdyenAPIHelper';
+import PaymentsAPIHelper from '../../utils/helpers/PaymentsAPIHelper';
 import SettingHelper from '../../utils/helpers/SettingHelper';
 
 const Component = ( { paymentMethod } ) => {
@@ -18,7 +18,7 @@ const Component = ( { paymentMethod } ) => {
             details: state.data.details,
             paymentData: state.data.paymentData
         }
-        AdyenAPIHelper.handleDetails(body)
+        PaymentsAPIHelper.handleDetails(body)
         .then(response => {
             setResultCode(response.resultCode);
         })
@@ -29,7 +29,7 @@ const Component = ( { paymentMethod } ) => {
 
     const handleOnSubmit = (state, component) => {
         if (state.isValid) {
-            AdyenAPIHelper.makePayment(state.data)
+            PaymentsAPIHelper.makePayment(state.data)
             .then(response => {
                 if (response.action) {
                     var configuration = {};
@@ -104,7 +104,7 @@ const Component = ( { paymentMethod } ) => {
     }
 
     const renderComponent = () => {
-        AdyenAPIHelper.getPaymentMethods()
+        PaymentsAPIHelper.getPaymentMethods()
         .then(data => {
             const configuration = {
                 showPayButton: true,

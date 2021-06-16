@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import AdyenAPIHelper from '../utils/helpers/AdyenAPIHelper';
+import PaymentsAPIHelper from '../utils/helpers/PaymentsAPIHelper';
 
 const Confirmation = () => {
   const [resultCode, setResultCode] = useState("");
@@ -31,7 +31,7 @@ const Confirmation = () => {
         }
       }
 
-      AdyenAPIHelper.handleDetails(body)
+      PaymentsAPIHelper.handleDetails(body)
         .then(response => {
           setResultCode(response.resultCode);
         })

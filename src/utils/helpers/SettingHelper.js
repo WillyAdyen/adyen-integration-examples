@@ -3,7 +3,9 @@ module.exports = {
         const fallbackValues = {
             country: "NL",
             currency: "EUR",
-            nativeThreeDS: false
+            nativeThreeDS: false,
+            recurringProcessingModel: "NoRecurring",
+            posRequestType: "Payment"
         };
 
         if (key === 'locale') {

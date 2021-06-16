@@ -19,7 +19,7 @@ const Header = () => {
               <Link to="/dropin">Dropin</Link>
             </li>
             <li>
-              <Link to="/Components">Components</Link>
+              <Link to="/components">Components</Link>
               <ul className="navbar-level-three">
               {Object.keys(componentList).map((key) => (
                 <li key={key}>
@@ -27,6 +27,15 @@ const Header = () => {
                 </li>
               ))}
             </ul>
+            </li>
+            <li>
+              <Link to="/paybylink">Pay By Link</Link>
+            </li>
+            <li>
+              <Link to="/recurringpayments">Recurring Payments</Link>
+            </li>
+            <li>
+              <Link to="/modifications">Modifications</Link>
             </li>
           </ul>
           

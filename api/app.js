@@ -7,6 +7,9 @@ var cors = require("cors");
 require('dotenv').config();
 
 var apiRouter = require('./routes/api');
+var pblRouter = require('./routes/pbl');
+var modificationsRouter = require('./routes/modifications');
+var posRouter = require('./routes/pos');
 
 var app = express();
 
@@ -18,6 +21,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/api", apiRouter);
+app.use("/api", pblRouter);
+app.use("/api", modificationsRouter);
+app.use("/api", posRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

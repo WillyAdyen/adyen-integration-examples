@@ -1,6 +1,6 @@
-var SettingHelper = require("../helpers/SettingHelper");
+var SettingHelper = require("./SettingHelper");
 
-class AdyenAPIHelper {
+class PaymentsAPIHelper {
   static getPaymentMethods() {
     return fetch("http://localhost:9000/api/getPaymentMethods",
     {
@@ -16,7 +16,7 @@ class AdyenAPIHelper {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
+      console.log("Get Payment Methods Response:", data);
       return data;
     }).catch(error => {
       throw Error(error);
@@ -36,15 +36,35 @@ class AdyenAPIHelper {
         origin: window.location.origin,
         country: SettingHelper.getSetting('country'),
         currency: SettingHelper.getSetting('currency'),
-        nativeThreeDS: SettingHelper.getSetting('nativeThreeDS')
+        nativeThreeDS: SettingHelper.getSetting('nativeThreeDS'),
+        recurringProcessingModel: SettingHelper.getSetting('recurringProcessingModel')
       })
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
+      console.log("Payment Response", data);
       return data;
     }).catch(error => {
-      throw Error(error);
+      throw Error("Payment Error", error);
+    });
+  }
+
+  static makeCustomPayment(data) {
+    return fetch("http://localhost:9000/api/customPayments",
+    {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Custom Payment Response", data);
+      return data;
+    }).catch(error => {
+      throw Error("Custom Payment Error", error);
     });
   }
 
@@ -65,25 +85,6 @@ class AdyenAPIHelper {
       throw Error(error);
     });
   }
-
-  static makePOSRequest(requestParameters) {
-    return fetch("http://localhost:9000/api/makePOSRequest",
-    {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestParameters)
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      return data;
-    }).catch(error => {
-      throw Error(error);
-    });
-  }
 }
 
-export default AdyenAPIHelper;
+export default PaymentsAPIHelper;

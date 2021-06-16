@@ -35,6 +35,7 @@ ul, li {
             &:hover {
                 + .navbar-level-two {
                     display: flex;
+                    flex-wrap: wrap;
                     z-index: 10;
                 }
             }

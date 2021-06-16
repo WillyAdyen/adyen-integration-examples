@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import AdyenCheckout from "@adyen/adyen-web";
-import AdyenAPIHelper from '../../utils/helpers/AdyenAPIHelper';
+import PaymentsAPIHelper from '../../utils/helpers/PaymentsAPIHelper';
 import { Redirect } from "react-router";
 import SettingHelper from "../../utils/helpers/SettingHelper";
 
@@ -16,7 +16,7 @@ const Dropin = () => {
       }, []);
     
     const renderDropin = () => {
-    AdyenAPIHelper.getPaymentMethods()
+    PaymentsAPIHelper.getPaymentMethods()
         .then(data => {
         const configuration = {
             paymentMethodsResponse: data, // The `/paymentMethods` response from the server.
@@ -25,7 +25,7 @@ const Dropin = () => {
             environment: "test",
             onSubmit: (state, dropin) => {
                 // Your function calling your server to make the `/payments` request
-                AdyenAPIHelper.makePayment(state.data)
+                PaymentsAPIHelper.makePayment(state.data)
                 .then(response => {
                     if (response.action) {
                     // Drop-in handles the action object from the /payments response
@@ -57,9 +57,8 @@ const Dropin = () => {
                     details: state.data.details,
                     paymentData: state.data.paymentData
                 }
-                AdyenAPIHelper.handleDetails(body)
+                PaymentsAPIHelper.handleDetails(body)
                 .then(response => {
-                    console.log(response);
                     if (response.action) {
                         dropin.handleAction(response.action);
                     } else {
