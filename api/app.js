@@ -48,4 +48,6 @@ app.post("/hook", (req, res) => {
   res.status(200).end() // Responding is important
 })
 
+console.log(process.env.NODE_ENV);
+
 module.exports = app;
