@@ -42,11 +42,10 @@ app.use(function(err, req, res, next) {
     error: err
   });
 });
-/* 
-app.set('port', 8443);
-console.log(app.get('port'));
-app.listen(app.get('port'), (something) => {
-  console.log("something", JSON.stringify(something));
-}); */
+
+app.post("/hook", (req, res) => {
+  console.log(req.body) // Call your action on the request here
+  res.status(200).end() // Responding is important
+})
 
 module.exports = app;
