@@ -9,7 +9,7 @@ module.exports = {
         var protocolVersion = "3.0";
         const transactionID = Math.floor(Math.random() * Math.floor(10000000)).toString();
         const timeStamp = new Date().toISOString();
-        var amount = parseFloat((Math.random() * (40)).toFixed(2)); // random amount
+        var amount = 1; // parseFloat((Math.random() * (40)).toFixed(2)); // random amount
 
         switch (type) {
             case posEnums.REQUEST_TYPE.PAYMENT:
@@ -53,6 +53,7 @@ module.exports = {
                     messageHeader: messageHeader,
                     paymentRequest: paymentRequest
                 };
+
                 break;
             case posEnums.REQUEST_TYPE.REFUND: // Referenced Refund
                 messageHeader = {

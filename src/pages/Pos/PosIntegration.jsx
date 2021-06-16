@@ -33,7 +33,17 @@ const PosIntegration = ({ integrationType }) => {
     .then(response => {
       setPaymentResponse(JSON.stringify(response));
       if (response.saleToPOIResponse.cardAcquisitionResponse) {
-        setPOITransactionID(response.saleToPOIResponse.cardAcquisitionResponse.pOIData.pOITransactionID);
+        requestParameters.pOITransactionID = response.saleToPOIResponse.cardAcquisitionResponse.pOIData.pOITransactionID;
+        requestParameters.requestType = "Payment";
+        requestParameters.serviceID = Math.floor(Math.random() * Math.floor(10000000)).toString();
+        console.log(response.saleToPOIResponse.cardAcquisitionResponse);
+        POSAPIHelper.makePOSRequest(requestParameters)
+        .then(response => {
+          setPaymentResponse(JSON.stringify(response));
+        })
+        .catch(error => {
+            throw Error(error);
+        });
       }
     })
     .catch(error => {

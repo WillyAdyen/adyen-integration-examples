@@ -50,9 +50,11 @@ router.post("/makePOSRequest", function(req, res, next) {
                 keyVersion: 1,
                 passphrase: "test",
               };
+              // console.log('before request', Date.now());
             terminalApi
             .request(terminalAPIPaymentRequest, securityKey)
             .then((obj) => {
+              // console.log('after request', Date.now());
               res.send(obj);
             })
             
