@@ -2,7 +2,7 @@ var SettingHelper = require("./SettingHelper");
 
 class PaymentsAPIHelper {
   static getPaymentMethods() {
-    return fetch("http://suspicious-hopper-c7358a.netlify.app:9000/api/getPaymentMethods",
+    return fetch("http://localhost:9000/api/getPaymentMethods",
     {
       method: "POST",
       headers: {

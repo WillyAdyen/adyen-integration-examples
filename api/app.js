@@ -12,7 +12,6 @@ var modificationsRouter = require('./routes/modifications');
 var posRouter = require('./routes/pos');
 
 var app = express();
-
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
@@ -42,12 +41,5 @@ app.use(function(err, req, res, next) {
     error: err
   });
 });
-
-app.post("/hook", (req, res) => {
-  console.log(req.body) // Call your action on the request here
-  res.status(200).end() // Responding is important
-})
-
-console.log(process.env.NODE_ENV);
 
 module.exports = app;
