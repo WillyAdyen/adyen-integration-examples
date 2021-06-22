@@ -18,6 +18,7 @@ const Dropin = () => {
     const renderDropin = () => {
     PaymentsAPIHelper.getPaymentMethods()
         .then(data => {
+            console.log(data);
         const configuration = {
             paymentMethodsResponse: data, // The `/paymentMethods` response from the server.
             clientKey: "test_AWHTVRUIQBCC5IX6EVHDZZEO3UBYUUPJ", // Web Drop-in versions before 3.10.1 use originKey instead of clientKey.

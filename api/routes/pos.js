@@ -22,7 +22,7 @@ router.post("/makePOSRequest", function(req, res, next) {
     switch (integrationType) {
         case "local":
             config.certificatePath = "/Users/willy/Documents/GitHub/Work/adyen-integration-examples/adyen-terminalfleet-test.pem";
-            config.terminalApiLocalEndpoint = "https://192.168.0.144";
+            config.terminalApiLocalEndpoint = "https://172.20.10.3";
             break;
         case "cloudsync":
             config.terminalApiCloudEndpoint = "https://terminal-api-test.adyen.com/sync";

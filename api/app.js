@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+var bp = require('body-parser');
 require('dotenv').config();
 
 var apiRouter = require('./routes/api');
@@ -42,4 +43,19 @@ app.use(function(err, req, res, next) {
   });
 });
 
-module.exports = app;
+
+const peer = express()
+peer.use(bp.json());
+const port = 8888
+
+peer.post('/', (req, res) => {
+    console.log("Notification:", req.body);
+    res.send("received");
+})
+  
+peer.listen(port, function(err){
+    if (err) console.log("Error in server setup")
+    console.log("Server listening on Port", port);
+})
+
+module.exports = { app, peer };
