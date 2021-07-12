@@ -12,6 +12,8 @@ var pblRouter = require('./routes/pbl');
 var modificationsRouter = require('./routes/modifications');
 var posRouter = require('./routes/pos');
 
+var NexoCrypto = require('./helpers/NexoCrypto');
+
 var app = express();
 app.use(cors());
 app.use(logger('dev'));
@@ -49,7 +51,9 @@ peer.use(bp.json());
 const port = 8888
 
 peer.post('/', (req, res) => {
-    console.log("Notification:", req.body);
+    var Crypto = new NexoCrypto();
+    var decryptedMessage = Crypto.decrypt_and_validate_hmac(req.body);
+    console.log("Notification:", decryptedMessage);
     res.send("received");
 })
   

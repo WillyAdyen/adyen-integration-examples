@@ -56,8 +56,8 @@ const PosIntegration = ({ integrationType }) => {
     <h1>{integrationType}</h1>
     <select id="posRequestType" name="posRequestType" defaultValue={posRequestType} onChange={typeOfRequest}>
         <option value={posEnums.REQUEST_TYPE.PAYMENT}>{posEnums.REQUEST_TYPE.PAYMENT}</option>
-        <option value={posEnums.REQUEST_TYPE.REFUND}>{posEnums.REQUEST_TYPE.REFUND}</option>
-        <option value={posEnums.REQUEST_TYPE.REVERSAL}>{posEnums.REQUEST_TYPE.REVERSAL}</option>
+        <option value={posEnums.REQUEST_TYPE.REFUND}>Unreferenced Refund</option>
+        <option value={posEnums.REQUEST_TYPE.REVERSAL}>Referenced Refund</option>
         <option value={posEnums.REQUEST_TYPE.ABORT}>{posEnums.REQUEST_TYPE.ABORT}</option>
         <option value={posEnums.REQUEST_TYPE.CARD_ACQUSITION}>{posEnums.REQUEST_TYPE.CARD_ACQUSITION}</option>
     </select>
