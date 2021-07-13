@@ -1,7 +1,6 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "http://localhost:9000",
   "private": true,
   "dependencies": {
     "@adyen/adyen-web": "^3.0.0",
@@ -46,9 +45,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
-  },
-  "devServer": {
-    "compress": true,
-    "public": "http://adyen-integration-examples.herokuapp.com"
   }
 }
