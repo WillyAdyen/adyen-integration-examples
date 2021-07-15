@@ -2,7 +2,7 @@ var SettingHelper = require("./SettingHelper");
 
 class PaymentsAPIHelper {
   static getPaymentMethods() {
-    return fetch("http://adyen-integration-examples.herokuapp.com:80/api/getPaymentMethods",
+    return fetch("/api/getPaymentMethods",
     {
       method: "POST",
       headers: {
