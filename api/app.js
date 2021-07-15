@@ -22,10 +22,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.static(path.resolve(__dirname, '../build')));
+
 app.use("/api", apiRouter);
 app.use("/api", pblRouter);
 app.use("/api", modificationsRouter);
 app.use("/api", posRouter);
+
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

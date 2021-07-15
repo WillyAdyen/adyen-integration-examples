@@ -24,7 +24,7 @@ class PaymentsAPIHelper {
   }
 
   static makePayment(stateData) {
-    return fetch("http://localhost:9000/api/payments",
+    return fetch("/api/payments",
     {
       method: "POST",
       headers: {
@@ -50,7 +50,7 @@ class PaymentsAPIHelper {
   }
 
   static makeCustomPayment(data) {
-    return fetch("http://localhost:9000/api/customPayments",
+    return fetch("/api/customPayments",
     {
       method: "POST",
       headers: {
@@ -69,7 +69,7 @@ class PaymentsAPIHelper {
   }
 
   static handleDetails(body) {
-    return fetch("http://localhost:9000/api/details",
+    return fetch("/api/details",
     {
       method: "POST",
       headers: {
