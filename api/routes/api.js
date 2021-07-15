@@ -119,7 +119,7 @@ router.post("/payments", function(req, res, next) {
         paymentMethod: parameters.stateData.paymentMethod,
         amount: { currency: parameters.currency, value: 125, },
         reference: "YOUR_ORDER_NUMBER",
-        returnUrl: "http://localhost:3000/confirmation",
+        returnUrl: "/confirmation",
         redirectFromIssuerMethod: "GET",
         browserInfo: parameters.stateData.browserInfo,
         channel: "WEB",

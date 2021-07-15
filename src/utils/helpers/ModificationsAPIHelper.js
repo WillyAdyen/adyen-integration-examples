@@ -2,7 +2,7 @@ import SettingHelper from "./SettingHelper";
 
 class ModificationsAPIHelper {
     static capture = (originalReference, amount) => {
-        return fetch("http://localhost:9000/api/capture",
+        return fetch("/api/capture",
         {
           method: "POST",
           headers: {
@@ -24,7 +24,7 @@ class ModificationsAPIHelper {
     }
 
     static refund = (originalReference, amount) => {
-      return fetch("http://localhost:9000/api/refund",
+      return fetch("/api/refund",
       {
         method: "POST",
         headers: {

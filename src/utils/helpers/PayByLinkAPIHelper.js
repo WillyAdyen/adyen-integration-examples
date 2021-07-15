@@ -2,7 +2,7 @@ import SettingHelper from "./SettingHelper";
 
 class PayByLinkAPIHelper {
     static generateLink = () => {
-        return fetch("http://localhost:9000/api/paymentLinks",
+        return fetch("/api/paymentLinks",
         {
           method: "POST",
           headers: {

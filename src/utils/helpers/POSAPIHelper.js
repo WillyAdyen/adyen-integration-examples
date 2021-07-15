@@ -1,6 +1,6 @@
 class POSAPIHelper {
   static makePOSRequest(requestParameters) {
-    return fetch("http://localhost:9000/api/makePOSRequest",
+    return fetch("/api/makePOSRequest",
     {
       method: "POST",
       headers: {
