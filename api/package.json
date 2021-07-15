@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "heroku": "node ./bin/www"
   },
   "dependencies": {
     "@adyen/adyen-web": "^4.0.0",
