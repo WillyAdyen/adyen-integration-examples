@@ -24,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "cd api && npm run start",
-    "heroku": "concurrently \"npm run build\" \"cd api && npm run heroku\""
+    "heroku": "concurrently \"npm install && npm run build\" \"cd api && npm install && npm run heroku\""
   },
   "eslintConfig": {
     "extends": [
