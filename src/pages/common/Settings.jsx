@@ -57,11 +57,13 @@ const Settings = () => {
               <option value="NL">Netherlands</option>
               <option value="SE">Sweden</option>
               <option value="US">United States of America</option>
+              <option value="PL">Poland</option>
           </select>
           <select id="currency" name="currency" value={currency} onChange={onSettingChange}>
               <option value="EUR">EUR</option>
               <option value="SEK">SEK</option>
               <option value="USD">USD</option>
+              <option value="PLN">PLN</option>
           </select>
         </div>
   </div>

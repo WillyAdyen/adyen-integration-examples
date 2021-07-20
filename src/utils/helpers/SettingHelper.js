@@ -18,6 +18,9 @@ module.exports = {
                 case 'SE':
                     language = 'sv';
                     break;
+                case 'PL':
+                    language = 'pl';
+                    break;
                 default:
                     language = 'en';
                     break;

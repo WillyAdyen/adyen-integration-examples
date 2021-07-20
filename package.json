@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:9000",
   "dependencies": {
     "@adyen/adyen-web": "^3.0.0",
     "@adyen/api-library": "^7.0.0",
